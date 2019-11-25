@@ -3,7 +3,7 @@ import { View, Modal, TextInput, Button, StyleSheet, Alert } from 'react-native'
 import { THEME } from '../theme'
 import { AppButton } from './ui/AppButton'
 
-export const EditModal = ({ visible, onCancel, todo, value, onSave }) => {
+export const EditModal = ({ visible, onCancel, value, onSave }) => {
 
     const [title, setTitle] = useState(value)
 
@@ -13,6 +13,11 @@ export const EditModal = ({ visible, onCancel, todo, value, onSave }) => {
         } else {
             onSave(title.trim())
         }
+    }
+
+    const cancelHandler = () => {
+        setTitle(value)
+        onCancel()
     }
 
     return (
@@ -33,7 +38,7 @@ export const EditModal = ({ visible, onCancel, todo, value, onSave }) => {
                 />
                 <View style={styles.buttonGroup} >
                     <AppButton 
-                        onPress={ onCancel }
+                        onPress={ cancelHandler }
                         color={ THEME.DANGER_COLOR }
                     >
                         Отменить

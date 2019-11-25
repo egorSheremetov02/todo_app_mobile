@@ -1,29 +1,36 @@
-import React from 'react'
-import { StyleSheet, View, FlatList, Image } from 'react-native'
+import React, { useState, useEffect, useContext } from 'react'
+import { StyleSheet, View, FlatList, Image, Dimensions } from 'react-native'
 import { TodoForm } from '../components/TodoForm'
 import { Todo } from '../components/Todo'
+import { THEME } from '../theme'
+import { TodoContext } from '../context/todo/todoContext'
+import { ScreenContext } from '../context/screen/screenContext'
 
-export const MainScreen = ({ addTodo, todos, deleteTodo, openTodo }) => {
+export const MainScreen = ({ openTodo }) => {
+    const {addTodo, todos, deleteTodo} = useContext(TodoContext)
+    const { changeScreen } = useContext(ScreenContext)
+    const [width, setWidth] = useState(Dimensions.get('window').width - 2 * THEME.PADDING_HORIZONTAL)
+    useEffect(() => {
+        const update = () => {
+            setWidth(Dimensions.get('window').width - 2 * THEME.PADDING_HORIZONTAL)
+        }
+        Dimensions.addEventListener('change', update)
+
+        return () => {
+            Dimensions.removeEventListener('change')
+        }
+    })
     let content = (
-        <FlatList
-            keyExtractor={item => item.id}
-            data={ todos }
-            renderItem={({ item }) => (
-                <Todo todo={item} deleteTodo={deleteTodo} onOpen={openTodo}></Todo>
-            )}
-        />
+        <View style={{ width }}>
+            <FlatList
+                keyExtractor={item => item.id}
+                data={ todos }
+                renderItem={({ item }) => (
+                    <Todo todo={item} deleteTodo={deleteTodo} onOpen={changeScreen}></Todo>
+                )}
+            />
+        </View>
     )
-
-    // if (todos.length === 0) {
-    //     content = (
-    //         <View style={styles.imageWrapper}> 
-    //             <Image  
-    //                 source={require('../../assets/no-items.png')}
-    //                 style={styles.image}
-    //             />
-    //         </View>
-    //     )
-    // }
 
     return (
         <View style={styles.wrapper}>

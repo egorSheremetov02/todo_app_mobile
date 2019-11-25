@@ -6,7 +6,7 @@ import { AppTextHeader } from './ui/AppTextHeader'
 export const Navbar = props => {
     return (
         <View style={styles.navbar}>
-            <AppTextHeader style={styles.text}>Todo App</AppTextHeader>
+            <AppTextHeader style={styles.text}>Todo</AppTextHeader>
         </View>
     )
 }
