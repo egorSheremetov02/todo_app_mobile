@@ -1,9 +1,11 @@
 export const THEME = {
-    DANGER_COLOR: '#A92014',
-    GREY_COLOR: '#757575',
-    MAIN_COLOR: '#43AEB9',
-    PADDING_HORIZONTAL: 25
+  DANGER_COLOR: '#A92014',
+  RED_COLOR: '#e53935',
+  GREY_COLOR: '#757575',
+  MAIN_COLOR: '#43AEB9',
+  TODO_COLOR: '#F8EAB1',
+  PADDING_HORIZONTAL: 25
 }
-//A4D0D5
+//A4D0D5  F8EFCA
 let purple = '#3949ab'
-let red = '#e53935'
+let red = ''

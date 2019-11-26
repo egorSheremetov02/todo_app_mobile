@@ -1,11 +1,13 @@
 import React from 'react'
 import { Text, StyleSheet } from 'react-native'
 
-export const AppText = props => <Text style={ {...styles.default, ...props.style }} >{ props.children }</Text>
+export const AppText = props => (
+  <Text style={{ ...styles.default, ...props.style }}>{props.children}</Text>
+)
 
 const styles = StyleSheet.create({
-    default: {
-        fontFamily: 'sans-regular',
-        fontSize: 18
-    }
+  default: {
+    fontFamily: 'sans-regular',
+    fontSize: 18
+  }
 })
