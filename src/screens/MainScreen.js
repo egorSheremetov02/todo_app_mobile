@@ -10,7 +10,7 @@ import { AppButton } from '../components/ui/AppButton'
 import { AppText } from '../components/ui/AppText'
 
 export const MainScreen = ({ openTodo }) => {
-  const { addTodo, todos, deleteTodo, fetchTodos, error, loading } = useContext(
+  const { addTodo, todos, deleteTodo, fetchTodos, error, loading, isFetched } = useContext(
     TodoContext
   )
   const { changeScreen } = useContext(ScreenContext)
@@ -18,7 +18,11 @@ export const MainScreen = ({ openTodo }) => {
     Dimensions.get('window').width - 2 * THEME.PADDING_HORIZONTAL
   )
 
-  const loadTodos = useCallback(async () => await fetchTodos(), [fetchTodos])
+  const loadTodos = useCallback(async () => {
+    if (!isFetched) {
+      await fetchTodos()
+    }
+  }, [fetchTodos])
 
   useEffect(() => {
     loadTodos()
@@ -33,7 +37,7 @@ export const MainScreen = ({ openTodo }) => {
     return () => {
       Dimensions.removeEventListener('change')
     }
-  })
+  }, [])
 
   if (loading) {
     return <AppLoader />

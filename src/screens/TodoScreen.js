@@ -23,8 +23,8 @@ export const TodoScreen = props => {
     setModal(false)
   }
 
-  const saveHandler = title => {
-    updateTodos(todo.id, title)
+  const saveHandler = async title => {
+    await updateTodos(todo.id, title)
     setModal(false)
   }
 

@@ -10,7 +10,8 @@ import {
   HIDE_LOADER,
   SHOW_ERROR,
   CLEAR_ERROR,
-  FETCH_TODOS
+  FETCH_TODOS,
+  CHANGE_FETCH_STATUS
 } from '../types'
 import { ScreenContext } from '../screen/screenContext'
 
@@ -18,7 +19,8 @@ export const TodoState = ({ children }) => {
   const initialState = {
     todos: [],
     loading: true,
-    error: null
+    error: null,
+    isFetched: false
   }
   const { changeScreen } = useContext(ScreenContext)
   const [state, dispatch] = useReducer(todoReducer, initialState)
@@ -50,6 +52,11 @@ export const TodoState = ({ children }) => {
           text: 'Удалить',
           style: 'distructive',
           onPress: () => {
+            fetch(`https://rn-todo-app-b42ed.firebaseio.com/todos/${id}.json`, {
+              method: 'DELETE',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ name: id })
+            })
             changeScreen(null)
             dispatch({ type: REMOVE_TODO, id })
           }
@@ -59,7 +66,19 @@ export const TodoState = ({ children }) => {
     )
   }
 
-  const updateTodos = (id, title) => dispatch({ type: UPDATE_TODO, id, title })
+  const updateTodos = async (id, title) => {
+    clearError()
+    try {
+      await fetch(`https://rn-todo-app-b42ed.firebaseio.com/todos/${id}.json`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title })
+      })
+      dispatch({ type: UPDATE_TODO, id, title })
+    } catch (e) {
+      showError('Что-то пошло не так...')
+    }
+  }
 
   const showLoader = () => dispatch({ type: SHOW_LOADER })
 
@@ -83,6 +102,7 @@ export const TodoState = ({ children }) => {
       const data = await response.json()
       const todos = Object.keys(data).map(key => ({ ...data[key], id: key }))
       dispatch({ type: FETCH_TODOS, todos: todos.reverse() })
+      dispatch({ type: CHANGE_FETCH_STATUS })
     } catch (e) {
       showError('Что-то пошло не так...')
       console.log()
@@ -96,6 +116,7 @@ export const TodoState = ({ children }) => {
       value={{
         todos: state.todos,
         loading: state.loading,
+        isFetched: state.isFetched,
         error: state.error,
         addTodo,
         deleteTodo,
